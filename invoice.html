@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GT Automech • Service Invoice</title>
+  <style>
+    :root {
+      --bg: #0f172a;           /* slate-900 */
+      --panel: #0b1224;        /* darker panel */
+      --muted: #94a3b8;        /* slate-400 */
+      --fg: #e2e8f0;           /* slate-200 */
+      --accent: #22c55e;       /* green-500 */
+      --accent-2: #38bdf8;     /* sky-400 */
+      --line: rgba(148, 163, 184, 0.18);
+      --chip: rgba(56, 189, 248, 0.12);
+      --danger: #ef4444;
+      --success: #10b981;
+      --shadow: 0 8px 30px rgba(2, 6, 23, 0.45);
+      --radius: 16px;
+    }
+
+    /* Layout */
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, var(--bg) 0%, #0b1224 80%);
+      color: var(--fg);
+      font: 500 14px/1.6 Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      letter-spacing: 0.2px;
+    }
+
+    .shell {
+      max-width: 980px;
+      margin: 40px auto;
+      padding: 16px;
+    }
+
+    .invoice {
+      background: radial-gradient(1200px 600px at 100% -10%, rgba(56, 189, 248, 0.08), transparent 60%),
+                  radial-gradient(1200px 600px at -20% 120%, rgba(34, 197, 94, 0.08), transparent 60%),
+                  linear-gradient(180deg, rgba(148,163,184,0.06), rgba(148,163,184,0.03));
+      backdrop-filter: blur(6px);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .header {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 20px;
+      padding: 28px 28px 20px 28px;
+      background: linear-gradient(180deg, rgba(2,6,23,0.32), rgba(2,6,23,0));
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .logo {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      display: grid; place-items: center;
+      font-weight: 800; letter-spacing: 0.6px;
+      background: linear-gradient(135deg, var(--accent-2), var(--accent));
+      color: #0b1224;
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,0.15);
+    }
+    .brand h1 { margin: 0; font-size: 20px; }
+    .brand p  { margin: 2px 0 0; color: var(--muted); font-weight: 600; font-size: 12px; }
+
+    .meta {
+      justify-self: end;
+      text-align: right;
+    }
+    .meta h2 { margin: 0 0 6px; font-size: 26px; letter-spacing: 1px; }
+    .meta .badge {
+      display: inline-block;
+      padding: 6px 10px; border-radius: 999px;
+      background: var(--chip); color: var(--accent-2);
+      border: 1px solid rgba(56,189,248,.25);
+      font-weight: 700; font-size: 12px;
+    }
+
+    .grid {
+      display: grid; gap: 14px; padding: 0 28px 24px;
+      grid-template-columns: repeat(12, 1fr);
+    }
+    .card {
+      background: rgba(15, 23, 42, 0.55);
+      border: 1px solid var(--line);
+      border-radius: 14px; padding: 16px;
+    }
+    .card h3 { margin: 0 0 10px; font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+    .kv { display: grid; grid-template-columns: 120px 1fr; gap: 6px 14px; }
+    .kv span { color: var(--muted); }
+
+    /* Table */
+    .table-wrap { padding: 0 28px 24px; }
+    table { width: 100%; border-collapse: collapse; overflow: hidden; border-radius: 14px; }
+    thead th {
+      font-size: 12px; letter-spacing: .8px; text-transform: uppercase;
+      text-align: left; color: var(--muted);
+      background: rgba(148,163,184,0.08);
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+    }
+    tbody td { padding: 12px 14px; border-bottom: 1px dashed var(--line); }
+    tbody tr:last-child td { border-bottom: none; }
+    .right { text-align: right; }
+    .muted { color: var(--muted); }
+    .pill { padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line); }
+
+    /* Package breakdown */
+    details { margin-top: 10px; }
+    summary { cursor: pointer; color: var(--accent-2); }
+    .pkg-items {
+      display: grid; gap: 6px; margin-top: 10px;
+      background: rgba(56, 189, 248, 0.06);
+      border: 1px solid rgba(56,189,248,0.18);
+      border-radius: 12px; padding: 10px;
+    }
+    .pkg-row { display: grid; grid-template-columns: 1fr 100px; }
+
+    /* Totals */
+    .totals { padding: 12px 28px 28px; display: grid; gap: 6px; max-width: 440px; margin-left: auto; }
+    .total-row { display: grid; grid-template-columns: 1fr 140px; gap: 16px; }
+    .grand { font-size: 20px; font-weight: 800; }
+
+    /* Footer */
+    .footer {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 28px; border-top: 1px solid var(--line);
+      background: rgba(15, 23, 42, 0.55);
+    }
+    .btn-print {
+      appearance: none; border: 1px solid var(--line); background: transparent; color: var(--fg);
+      padding: 10px 14px; border-radius: 12px; font-weight: 700; cursor: pointer; letter-spacing: .4px;
+    }
+    .btn-print:hover { border-color: rgba(148,163,184,0.35); }
+
+    /* Responsive */
+    @media (max-width: 720px) {
+      .header { grid-template-columns: 1fr; }
+      .meta { justify-self: start; text-align: left; }
+      .grid { grid-template-columns: 1fr; }
+      .kv { grid-template-columns: 1fr; }
+      .totals { margin-left: 0; }
+    }
+
+    /* Print */
+    @media print {
+      body { background: #fff; color: #0f172a; }
+      .shell { margin: 0; padding: 0; }
+      .invoice { border: none; box-shadow: none; }
+      .header, .footer { background: #fff; }
+      .btn-print { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="invoice" id="invoice">
+      <!-- Header -->
+      <div class="header">
+        <div class="brand">
+          <div class="logo">GT</div>
+          <div>
+            <h1>GT Automech</h1>
+            <p>Professional Car Service & Repairs</p>
+            <p class="muted">www.gtautomech.example • +94 77 000 0000</p>
+          </div>
+        </div>
+        <div class="meta">
+          <h2>INVOICE</h2>
+          <div class="badge">#INV-2025-0012</div>
+          <div class="muted" style="margin-top:8px">Issued: 01 Oct 2025</div>
+          <div class="muted">Due: 08 Oct 2025</div>
+        </div>
+      </div>
+
+      <!-- Parties & Vehicle -->
+      <div class="grid">
+        <div class="card" style="grid-column: span 6;">
+          <h3>Bill To</h3>
+          <div class="kv">
+            <span>Name</span><strong>John Perera</strong>
+            <span>Phone</span><span>+94 71 234 5678</span>
+            <span>Email</span><span>john.perera@example.com</span>
+            <span>Address</span><span>12, Lake Road, Colombo</span>
+          </div>
+        </div>
+        <div class="card" style="grid-column: span 6;">
+          <h3>Vehicle</h3>
+          <div class="kv">
+            <span>Make/Model</span><strong>Toyota Axio</strong>
+            <span>Year</span><span>2016</span>
+            <span>Reg No.</span><span>ABC-1234</span>
+            <span>Odometer</span><span>86,240 km</span>
+          </div>
+        </div>
+        <div class="card" style="grid-column: span 12;">
+          <h3>Job</h3>
+          <div class="kv">
+            <span>Job #</span><strong>JOB-7842</strong>
+            <span>Service Advisor</span><span>Ruwan D.</span>
+            <span>Notes</span><span>Customer reports vibration over 80 km/h and A/C not cooling well.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Services Table -->
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:44%">Description</th>
+              <th>Package / Type</th>
+              <th class="right">Unit Cost (LKR)</th>
+              <th class="right">Qty</th>
+              <th class="right">Line Total (LKR)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Package: Essential Service -->
+            <tr>
+              <td>
+                <strong>Essential Service Package</strong>
+                <details>
+                  <summary>Show cost breakdown</summary>
+                  <div class="pkg-items">
+                    <div class="pkg-row"><span>Engine Oil (5W-30, 4L)</span><span class="right">12,500.00</span></div>
+                    <div class="pkg-row"><span>Oil Filter</span><span class="right">2,200.00</span></div>
+                    <div class="pkg-row"><span>Air Filter</span><span class="right">3,000.00</span></div>
+                    <div class="pkg-row"><span>General Inspection & Labour</span><span class="right">4,500.00</span></div>
+                  </div>
+                </details>
+              </td>
+              <td><span class="pill">Service Package</span></td>
+              <td class="right">22,200.00</td>
+              <td class="right">1</td>
+              <td class="right">22,200.00</td>
+            </tr>
+
+            <!-- Package: A/C Service  -->
+            <tr>
+              <td>
+                <strong>A/C Performance Service</strong>
+                <details>
+                  <summary>Show cost breakdown</summary>
+                  <div class="pkg-items">
+                    <div class="pkg-row"><span>Cabin Filter</span><span class="right">3,200.00</span></div>
+                    <div class="pkg-row"><span>Evaporator Cleaning</span><span class="right">4,800.00</span></div>
+                    <div class="pkg-row"><span>Refrigerant Top-up (R134a)</span><span class="right">3,500.00</span></div>
+                    <div class="pkg-row"><span>Leak Test & Labour</span><span class="right">3,000.00</span></div>
+                  </div>
+                </details>
+              </td>
+              <td><span class="pill">Service Package</span></td>
+              <td class="right">14,500.00</td>
+              <td class="right">1</td>
+              <td class="right">14,500.00</td>
+            </tr>
+
+            <!-- Job: Wheel Balancing -->
+            <tr>
+              <td>
+                <strong>Wheel Balancing & Alignment</strong>
+                <div class="muted">High-speed vibration diagnosis and correction</div>
+              </td>
+              <td><span class="pill">Job</span></td>
+              <td class="right">6,800.00</td>
+              <td class="right">1</td>
+              <td class="right">6,800.00</td>
+            </tr>
+
+            <!-- Parts -->
+            <tr>
+              <td>
+                <strong>Front Brake Pads (Pair)</strong>
+                <div class="muted">OEM equivalent</div>
+              </td>
+              <td><span class="pill">Part</span></td>
+              <td class="right">9,400.00</td>
+              <td class="right">1</td>
+              <td class="right">9,400.00</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Totals -->
+      <div class="totals">
+        <div class="total-row"><div>Subtotal</div><div class="right">52,900.00</div></div>
+        <div class="total-row"><div>Shop Supplies (2%)</div><div class="right">1,058.00</div></div>
+        <div class="total-row"><div>VAT (15%)</div><div class="right">8,145.90</div></div>
+        <div class="total-row grand"><div>Amount Due</div><div class="right">62,103.90</div></div>
+      </div>
+
+      <!-- Footer -->
+      <div class="footer">
+        <div class="muted">Thank you for choosing <strong>GT Automech</strong>. Warranty on parts: 6 months or 10,000 km.</div>
+        <button class="btn-print" onclick="window.print()">Print Invoice</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Bigo Footwear | Coming Soon</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Favicon -->
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/fontawesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #1d1d1d, #333333);
+            color: #fff;
+            font-family: "Poppins", sans-serif;
+        }
+
+        .coming-soon-container {
+            text-align: center;
+            animation: fadeInUp 1.5s ease;
+        }
+
+        .coming-soon-container img {
+            max-width: 220px;
+            margin-bottom: 20px;
+            animation: pulse 3s infinite;
+        }
+
+        .coming-soon-container h1 {
+            font-size: 48px;
+            margin-bottom: 15px;
+            font-weight: 700;
+            color: #f8f8f8;
+        }
+
+        .coming-soon-container p {
+            font-size: 18px;
+            margin-bottom: 40px;
+            color: #cccccc;
+        }
+
+        /* Countdown Timer */
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .countdown div {
+            text-align: center;
+        }
+
+        .countdown span {
+            font-size: 42px;
+            font-weight: bold;
+            display: block;
+            color: #ffcc00;
+        }
+
+        .countdown small {
+            font-size: 14px;
+            text-transform: uppercase;
+            color: #fff;
+        }
+
+        /* Floating animation background */
+        .bg-animation {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        .bg-animation span {
+            position: absolute;
+            display: block;
+            width: 25px;
+            height: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            animation: animate 20s linear infinite;
+            bottom: -150px;
+        }
+
+        .bg-animation span:nth-child(1) {
+            left: 25%;
+            width: 40px;
+            height: 40px;
+            animation-delay: 0s;
+        }
+
+        .bg-animation span:nth-child(2) {
+            left: 10%;
+            width: 60px;
+            height: 60px;
+            animation-delay: 2s;
+            animation-duration: 12s;
+        }
+
+        .bg-animation span:nth-child(3) {
+            left: 70%;
+            width: 30px;
+            height: 30px;
+            animation-delay: 4s;
+        }
+
+        .bg-animation span:nth-child(4) {
+            left: 40%;
+            width: 50px;
+            height: 50px;
+            animation-delay: 0s;
+            animation-duration: 18s;
+        }
+
+        .bg-animation span:nth-child(5) {
+            left: 65%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 0s;
+        }
+
+        .bg-animation span:nth-child(6) {
+            left: 75%;
+            width: 110px;
+            height: 110px;
+            animation-delay: 3s;
+        }
+
+        @keyframes animate {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-1000px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Background Animation -->
+    <div class="bg-animation">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <div class="coming-soon-container">
+        <!-- Use your existing logo -->
+        <img src="images/Logo.png" alt="Bigo Footwear Logo">
+
+        <h1>We’re Coming Soon</h1>
+        <p>Bigo Footwear is preparing something amazing for you.<br> Stay tuned for the official launch!</p>
+
+        <div class="countdown">
+            <div>
+                <span id="days">00</span>
+                <small>Days</small>
+            </div>
+            <div>
+                <span id="hours">00</span>
+                <small>Hours</small>
+            </div>
+            <div>
+                <span id="minutes">00</span>
+                <small>Minutes</small>
+            </div>
+            <div>
+                <span id="seconds">00</span>
+                <small>Seconds</small>
+            </div>
+        </div>
+
+        <p><i class="fa fa-envelope"></i> Contact us at <a href="mailto:bigofootwear500@gmail.com"
+                style="color:#ffcc00;">bigofootwear500@gmail.com</a></p>
+    </div>
+
+    <!-- Countdown Script -->
+    <script>
+        const launchDate = new Date("2025-09-28 00:00:00").getTime();
+
+        const timer = setInterval(() => {
+            const now = new Date().getTime();
+            const distance = launchDate - now;
+
+            let days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerHTML = days;
+            document.getElementById("hours").innerHTML = hours;
+            document.getElementById("minutes").innerHTML = minutes;
+            document.getElementById("seconds").innerHTML = seconds;
+
+            if (distance < 0) {
+                clearInterval(timer);
+                document.querySelector(".countdown").innerHTML = "<h2>We are Live Now!</h2>";
+            }
+        }, 1000);
+    </script>
+</body>
+
+</html>
