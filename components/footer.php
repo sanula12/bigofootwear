@@ -248,7 +248,7 @@
             document.getElementById("year").textContent = new Date().getFullYear();
         </script>
         <div class="sx-f-copy">
-            Developed by <a href="#" target="_blank" style="color:#07d988; text-decoration:none;">LaunchpadLK</a>
+            Developed by <a href="#" target="_blank" style="color:#07d988; text-decoration:none;">AITS</a>
         </div>
     </div>
     <!-- FOOTER COPYRIGHT -->
